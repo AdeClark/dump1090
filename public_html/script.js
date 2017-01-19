@@ -12,6 +12,7 @@ var pointarray;
 var heatmap;
 var csv = [];
 var heatmapfile;
+var audio = new Audio('alert.ogg');
 
 var SpecialSquawks = {
         '7500' : { cssClass: 'squawk7500', markerColor: 'rgb(255, 85, 85)', text: 'Aircraft Hijacking' },
@@ -723,6 +724,17 @@ function toggleRange() {
     loadKMLmap();
 }
 
+// This turns on or off the audio alerts
+function toggleSound() {
+    if (document.getElementById("soundtoggle").textContent=="Unmute") {
+        document.getElementById("soundtoggle").textContent="Mute";
+        console.log("Sound on");
+    } else {
+        document.getElementById("soundtoggle").textContent="Unmute";
+        console.log("Sound off");
+    }
+}
+
 // This looks for planes to reap out of the master Planes variable
 function reaper() {
         //console.log("Reaping started..");
@@ -921,6 +933,9 @@ function refreshTableInfo() {
                         if (tableplane.squawk in SpecialSquawks) {
                                 classes = classes + " " + SpecialSquawks[tableplane.squawk].cssClass;
                                 show_squawk_warning = true;
+                                if (document.getElementById("soundtoggle").textContent=="Mute" && tableplane.squawk !== 7600) {
+                                    audio.play();
+                                }
 			}			                
 
                         // ICAO doesn't change
